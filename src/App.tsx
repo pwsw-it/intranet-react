@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.css';
-import Addresses from './Addresses';
+import Contacts from './Contacts';
+
 
 function App() {
   return (
     <div className="App">
-      <Addresses />
+      <Contacts />
     </div>
   );
 }

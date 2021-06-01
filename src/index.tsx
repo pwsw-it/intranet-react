@@ -1,20 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Addreses from './Addresses'
-import CAddreses from './CAddresses'
+import Contacts from './Contacts'
+import { Provider } from 'react-redux'
+import { store } from './rdx';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Addreses />
-  </React.StrictMode>,
+<Provider store={store}>
+   <React.StrictMode>
+    <Contacts />
+  </React.StrictMode>
+  </Provider>  
+  ,
   document.getElementById('r1')
 );
 
-ReactDOM.render(
-  <React.StrictMode>
-    <CAddreses />
-  </React.StrictMode>,
-  document.getElementById('r2')
-);
+
 
