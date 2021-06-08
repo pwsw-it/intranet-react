@@ -8,7 +8,12 @@ import Filter   from  "./Filter"
 import Contact   from  "./Contact"
 import { connect } from 'react-redux';
 import { AppState, Actions, store } from './rdx'
-import { BranchesService, Branches, Branch } from './api'
+import { BranchesService, ContactsService, 
+  ApiBranches, 
+  ApiContacts, 
+  ApiBranch,
+  // ApiContact 
+} from './api'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -51,7 +56,7 @@ type AState = {
   value : number
 }
  
-class CContacts extends React.Component<AProps, AState> {
+class Contacts extends React.Component<AProps, AState> {
   
   constructor(props: AProps) {
       super(props)
@@ -70,8 +75,21 @@ class CContacts extends React.Component<AProps, AState> {
   async getBranches() {
     BranchesService.getBranches( { } ) 
       .then(
-        (res : Branches) => {
+        (res : ApiBranches) => {
           store.dispatch(Actions.setBranches(res.branches));
+        }
+      )        
+      .catch( (err : any) => {        
+          alert('Błąd odczytu'+JSON.stringify(err) );
+         } 
+      );
+   }   
+
+   async getContacts(bcode : string) {
+    ContactsService.getContacts( { bcode : bcode} ) 
+      .then(
+        (res : ApiContacts) => {
+          store.dispatch(Actions.setContacts(res.contacts));
         }
       )        
       .catch( (err : any) => {        
@@ -99,7 +117,7 @@ class CContacts extends React.Component<AProps, AState> {
         aria-label="Instytuty"
         className={ classes.tabs }
       >
-        {this.props.rstate.branches.map((br : Branch, i : number) => {     
+        {this.props.rstate.branches.map((br : ApiBranch, i : number) => {     
            const label=br.branch;
            return (<Tab label={label} {...a11yProps(i)}  />
            ) 
@@ -151,6 +169,6 @@ const mapowanieStanuNaWlasnosc = (state : AppState) => ({
 
 export default 
 connect(mapowanieStanuNaWlasnosc)(
-  withStyles(tabsStyles)(CContacts)
+  withStyles(tabsStyles)(Contacts)
 )
 

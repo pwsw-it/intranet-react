@@ -32,7 +32,7 @@ export class BranchesService {
   /**
    *
    */
-  static getBranches(options: IRequestOptions = {}): Promise<ApiBranches> {
+  static getBranches(options: IRequestOptions = {}): Promise<Branches> {
     return new Promise((resolve, reject) => {
       const configs: IRequestConfig = { ...options, method: 'get' };
       configs.headers = {
@@ -68,7 +68,7 @@ export class ContactsService {
       bcode?: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<ApiContacts> {
+  ): Promise<Contacts> {
     return new Promise((resolve, reject) => {
       const configs: IRequestConfig = { ...options, method: 'get' };
       configs.headers = {
@@ -93,7 +93,7 @@ export class ContactsService {
   }
 }
 
-export class ApiBranch {
+export class Branch {
   /** identyfikator */
   id: string;
 
@@ -110,16 +110,16 @@ export class ApiBranch {
   }
 }
 
-export class ApiBranches {
+export class Branches {
   /**  */
-  branches: ApiBranch[];
+  branches: Branch[];
 
   constructor(data: undefined | any = {}) {
     this['branches'] = data['branches'];
   }
 }
 
-export class ApiContact {
+export class Contact {
   /** nazwisko */
   bcode: string;
 
@@ -148,9 +148,9 @@ export class ApiContact {
   }
 }
 
-export class ApiContacts {
+export class Contacts {
   /**  */
-  contacts: ApiContact[];
+  contacts: Contact[];
 
   constructor(data: undefined | any = {}) {
     this['contacts'] = data['contacts'];

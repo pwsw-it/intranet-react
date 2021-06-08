@@ -5,12 +5,12 @@
 import { createStore, Store, applyMiddleware } from 'redux';
 import { definition, create, StateOf } from 'redux-compact';
 import logger from 'redux-logger'
-import { Contact, Branch } from './api'
+import { ApiContact, ApiBranch } from './api'
 
 export type  AddrState = {
  filter : string,
- contacts : Contact[],
- branches : Branch[]
+ contacts : ApiContact[],
+ branches : ApiBranch[]
 };
 
 const appDef = definition<AddrState>()
@@ -24,10 +24,10 @@ const appDef = definition<AddrState>()
   setFilter: (aState : AddrState, newFilter: string) => 
    ({...aState, filter: newFilter}),
 
-  setBranches: (aState : AddrState, branches: Branch[]) => 
+  setBranches: (aState : AddrState, branches: ApiBranch[]) => 
    ({...aState, branches: branches}),
 
-  setContacts: (aState : AddrState, contacts: Contact[]) => 
+  setContacts: (aState : AddrState, contacts: ApiContact[]) => 
    ({...aState, contacts: contacts}),
 
 
