@@ -2,27 +2,35 @@
  Redux (z użyciem redux-compact)
  https://github.com/maciekwawro/redux-compact
 */
-import { createStore, Store
-        //, applyMiddleware 
-       } from 'redux';
+import { createStore, Store, applyMiddleware } from 'redux';
 import { definition, create, StateOf } from 'redux-compact';
-//import logger from 'redux-logger';
+import logger from 'redux-logger'
+import { Contact, Branch } from './api'
 
 export type  AddrState = {
-    tab : number;
-    filter : string;
+ filter : string,
+ contacts : Contact[],
+ branches : Branch[]
 };
 
 const appDef = definition<AddrState>()
 .setDefault( { 
-    tab : 0,
-    filter : ''
+  filter : '',
+  contacts: [],
+  branches: []
   })
 .addReducers({
-  selectTab: (aState : AddrState, newTab: number) => 
-   ({...aState, tab: newTab}),
-  setFilter : (aState : AddrState, newFilter  : string='') => 
-               ({...aState, filter : newFilter }),
+
+  setFilter: (aState : AddrState, newFilter: string) => 
+   ({...aState, filter: newFilter}),
+
+  setBranches: (aState : AddrState, branches: Branch[]) => 
+   ({...aState, branches: branches}),
+
+  setContacts: (aState : AddrState, contacts: Contact[]) => 
+   ({...aState, contacts: contacts}),
+
+
 });
 
 const { Actions, reduce } = create(appDef);
@@ -30,7 +38,7 @@ export { Actions }
 export type AppState = StateOf<typeof appDef>;
 export const store: Store<AppState> = createStore(  
     reduce,
-//    applyMiddleware(logger),
+    applyMiddleware(logger),
 );
 
 

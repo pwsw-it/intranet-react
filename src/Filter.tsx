@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core'
 import React from 'react'
 import { connect } from 'react-redux';
-import { AppState, Actions, store  } from './rdx'
+import { AppState, Actions, store } from './rdx'
 
 
 const styleFilter = (theme: Theme) => (
@@ -16,29 +16,28 @@ const styleFilter = (theme: Theme) => (
 
 type FilterProps = {
     classes?: any,
-    rstate: AppState
+    rstate? : any
 }
-
+/*
 type FilterState = {
-    filter: string;
-};
-
-class Filter extends React.Component<FilterProps, FilterState> {
-
+    filter: string,
+    tabNr : number
+}
+*/
+class Filter extends React.Component<FilterProps /*, FilterState*/ > {
+/*
     constructor(props: FilterProps) {
         super(props);
         this.state={
-            filter : ''
+            filter:'',
+            tabNr : 0
         }
     }
-/* przetestuj:
+*/
     handleChange = (event : any) => {
-        alert(JSON.stringify(event.target.value))
-    }
-    */
-
-    handleChange = (event : any) => {
-        //this.setState({...this.state, filter: event.target.value})
+        //alert(event.target.value)
+        // źle this.state.filter=event.target.value
+        // stan lokalny: this.setState({...this.state,filter: event.target.value})
         store.dispatch(Actions.setFilter(event.target.value));
     }
 
@@ -56,12 +55,9 @@ class Filter extends React.Component<FilterProps, FilterState> {
 
 }
 
-//export default withStyles(styleFilter)(Filter);
-const mapStateToProps = (state : AppState) => ({
+const mapowanieStanuNaWlasnosc = (state : AppState) => ({
     rstate: state
   });
   
-export  default connect(mapStateToProps)( 
-    withStyles(styleFilter)(Filter)
- );
-  
+export default 
+ connect(mapowanieStanuNaWlasnosc)(withStyles(styleFilter)(Filter));

@@ -3,11 +3,12 @@ import { Theme, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import { connect } from 'react-redux';
-import { AppState } from './rdx'
 import { Grid } from '@material-ui/core';
 import Filter   from  "./Filter"
 import Contact   from  "./Contact"
+import { connect } from 'react-redux';
+import { AppState, Actions, store } from './rdx'
+import { BranchesService, Branches, Branch } from './api'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,15 +43,15 @@ function a11yProps(index: any) {
 }
 
 type AProps = {
-  rstate: AppState;
-  classes? : any
+  classes? : any,
+  rstate? : any
 }
 
 type AState = {
   value : number
 }
  
-class Contacts extends React.Component<AProps, AState> {
+class CContacts extends React.Component<AProps, AState> {
   
   constructor(props: AProps) {
       super(props)
@@ -63,8 +64,26 @@ class Contacts extends React.Component<AProps, AState> {
 
   match = (s : string) => {
     if (this.props.rstate.filter==='') return true;
-    return s.indexOf(this.props.rstate.filter)>=0
+    return (s.indexOf(this.props.rstate.filter)>=0 ) 
   }
+
+  async getBranches() {
+    BranchesService.getBranches( { } ) 
+      .then(
+        (res : Branches) => {
+          store.dispatch(Actions.setBranches(res.branches));
+        }
+      )        
+      .catch( (err : any) => {        
+          alert('Błąd odczytu'+JSON.stringify(err) );
+         } 
+      );
+   }   
+
+  componentDidMount() {
+    this.getBranches();
+  }
+
 
   render() { 
       const classes = this.props.classes;
@@ -80,45 +99,32 @@ class Contacts extends React.Component<AProps, AState> {
         aria-label="Instytuty"
         className={ classes.tabs }
       >
-        <Tab label="Biuro" {...a11yProps(0)}  />
-        <Tab label="Portiernia" {...a11yProps(1)}  />
-        <Tab label="Księgowość" {...a11yProps(2)}  />
-        <Tab label="Magazyn" {...a11yProps(3)}  />
-        <Tab label="Sprzedaż" {...a11yProps(4)}  />
-        <Tab label="Sekretariat" {...a11yProps(5)}  />
-        <Tab label="Zakupy" {...a11yProps(6)}  />
+        {this.props.rstate.branches.map((br : Branch, i : number) => {     
+           const label=br.branch;
+           return (<Tab label={label} {...a11yProps(i)}  />
+           ) 
+        })}
       </Tabs>
       <TabPanel value={this.state.value} index={0}>
         <h2>Biuro</h2>
-        <Filter />
+        <Filter  />
     <Grid container >
-        {this.match('Jurek Wawro') && 
-     <Contact nazwisko="Jurek Wawro"  tel="999" email="jw@gmail.com"  link="#" funkcja="informatyk" /> }
-        {this.match('Jan Kowalski') && 
-     <Contact nazwisko="Jan Kowalski"  tel="999" email="jk@gmail.com" link="#" funkcja="sprzedawca" /> }
-        {this.match('Jan Nowak') && 
-     <Contact nazwisko="Jan Nowak"  tel="999" email="jw@gmail.com"  link="#" funkcja="informatyk" /> }
-        {this.match('Józef Nowak') && 
-     <Contact nazwisko="Józef Nowak"  tel="999" email="jk@gmail.com" link="#" funkcja="sprzedawca" /> }
+     { this.match("Jurek Wawro") &&
+       <Contact nazwisko="Jurek Wawro"  tel="999" email="jw@gmail.com"  link="#" funkcja="informatyk" /> 
+     }
+     { this.match("Jan Kowalski") &&
+     <Contact nazwisko="Jan Kowalski"  tel="999" email="jk@gmail.com" link="#" funkcja="sprzedawca" /> 
+     }
+     { this.match("Jan Nowak") &&
+      <Contact nazwisko="Jan Nowak"  tel="999" email="jw@gmail.com"  link="#" funkcja="informatyk" /> 
+     }
+     { this.match("Józef Nowak") &&
+      <Contact nazwisko="Józef Nowak"  tel="999" email="jk@gmail.com" link="#" funkcja="sprzedawca" /> 
+     }
      </Grid>     
       </TabPanel>
       <TabPanel value={this.state.value} index={1}>
-        Portiernia 
-      </TabPanel>
-      <TabPanel value={this.state.value} index={2}>
-        Księgowość
-      </TabPanel>
-      <TabPanel value={this.state.value} index={3}>
-        Magazyn
-      </TabPanel>
-      <TabPanel value={this.state.value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={this.state.value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={this.state.value} index={6}>
-        Item Seven
+        ....
       </TabPanel>
     </div>
   );
@@ -139,10 +145,12 @@ const tabsStyles = (theme: Theme) => ({
 });
 
 
-const mapStateToProps = (state : AppState) => ({
-rstate: state
+const mapowanieStanuNaWlasnosc = (state : AppState) => ({
+  rstate: state
 });
 
-export default connect(mapStateToProps)( 
-  withStyles(tabsStyles)(Contacts)
+export default 
+connect(mapowanieStanuNaWlasnosc)(
+  withStyles(tabsStyles)(CContacts)
 )
+
