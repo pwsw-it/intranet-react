@@ -23,7 +23,7 @@
     }
   ],
   "definitions": {
-    "Branch": {
+    "ApiBranch": {
       "type": "object",
       "properties": {
         "id": {
@@ -40,18 +40,18 @@
         }
       }
     },
-    "Branches": {
+    "ApiBranches": {
       "type": "object",
       "properties": {
         "branches": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Branch"
+            "$ref": "#/definitions/ApiBranch"
           }
         }
       }
     },
-    "Contact": {
+    "ApiContact": {
       "type": "object",
       "properties": {
         "bcode": {
@@ -80,13 +80,13 @@
         }
       }
     },
-    "Contacts": {
+    "ApiContacts": {
       "type": "object",
       "properties": {
         "contacts": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Contact"
+            "$ref": "#/definitions/ApiContact"
           }
         }
       }
@@ -103,31 +103,9 @@
           "description": "ret. code"
         }
       }
-    },
-    "Info": {
-      "type": "object",
-      "properties": {
-        "result": {
-          "type": "string",
-          "description": "informacje"
-        }
-      }
     }
   },
   "paths": {
-    "/info": {
-      "get": {
-        "operationId": "getInfo",
-        "responses": {
-          "200": {
-            "description": "Sukces - lista wydziałów",
-            "schema": {
-              "$ref": "#/definitions/Info"
-            }
-          }
-        }
-      }
-    },
     "/branches": {
       "get": {
         "operationId": "getBranches",
@@ -135,7 +113,7 @@
           "200": {
             "description": "Sukces - lista wydziałów",
             "schema": {
-              "$ref": "#/definitions/Branches"
+              "$ref": "#/definitions/ApiBranches"
             }
           },
           "500": {
@@ -165,7 +143,7 @@
           "200": {
             "description": "Success",
             "schema": {
-              "$ref": "#/definitions/Contacts"
+              "$ref": "#/definitions/ApiContacts"
             }
           },
           "500": {

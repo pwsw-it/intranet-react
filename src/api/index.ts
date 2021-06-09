@@ -25,7 +25,9 @@ export const serviceOptions: ServiceOptions = {};
 
 // Instance selector
 function axios(configs: IRequestConfig): AxiosPromise {
-  return serviceOptions.axios ? serviceOptions.axios.request(configs) : axiosStatic(configs);
+  return serviceOptions.axios ? 
+    serviceOptions.axios.request(configs) : 
+    axiosStatic(configs);
 }
 
 export class BranchesService {
@@ -70,18 +72,16 @@ export class ContactsService {
     options: IRequestOptions = {}
   ): Promise<ApiContacts> {
     return new Promise((resolve, reject) => {
-      const configs: IRequestConfig = { ...options, method: 'get' };
+      const configs: IRequestConfig = { ...options, 
+          method: 'get' };
       configs.headers = {
         ...options.headers,
         'Content-Type': 'application/json'
       };
       let url = baseUrl+'/contacts';
-
       configs.url = url;
-      configs.params = { bcode: params['bcode'] };
-      let data = null;
+      configs.params = params;
 
-      configs.data = data;
       axios(configs)
         .then(res => {
           resolve(res.data);

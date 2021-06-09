@@ -3,6 +3,7 @@ import { Grid, Card, CardContent, Theme, Typography, CardActions, Button,
 import React from 'react'
 
 type ContactProps = {
+    id? : number,
     nazwisko? : string,
     tel? : string,
     email? : string,
@@ -16,7 +17,8 @@ const styleContact = (theme : Theme) =>
          root: { color : 'green', 
                 },
          title : { color : 'red'},
-         pos : { color : 'blue'}
+         pos : { color : 'blue'},
+         wdiv: {width:'100%'}
      }
  )
 
@@ -26,8 +28,8 @@ class Contact extends React.Component<ContactProps>{
         const classes = this.props.classes
 
         return (
-          <Grid item xl={3} xs={4}>
-            <Card className={classes.root}>
+          <Grid item xl={3} xs={4} >
+            <Card className={classes.root} id={this.props.id?this.props.id.toString():'0'}>
             <CardContent>
               <Typography className={classes.title} color="textSecondary" gutterBottom>
                 { this.props.nazwisko }

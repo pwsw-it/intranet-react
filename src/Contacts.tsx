@@ -3,17 +3,11 @@ import { Theme, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import { Grid } from '@material-ui/core';
 import Filter   from  "./Filter"
-import Contact   from  "./Contact"
 import { connect } from 'react-redux';
 import { AppState, Actions, store } from './rdx'
-import { BranchesService, ContactsService, 
-  ApiBranches, 
-  ApiContacts, 
-  ApiBranch,
-  // ApiContact 
-} from './api'
+import {BranchesService, ApiBranches,  ApiBranch } from './api'
+import FContacts from './FContacts';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -84,19 +78,7 @@ class Contacts extends React.Component<AProps, AState> {
          } 
       );
    }   
-
-   async getContacts(bcode : string) {
-    ContactsService.getContacts( { bcode : bcode} ) 
-      .then(
-        (res : ApiContacts) => {
-          store.dispatch(Actions.setContacts(res.contacts));
-        }
-      )        
-      .catch( (err : any) => {        
-          alert('Błąd odczytu'+JSON.stringify(err) );
-         } 
-      );
-   }   
+     
 
   componentDidMount() {
     this.getBranches();
@@ -104,8 +86,8 @@ class Contacts extends React.Component<AProps, AState> {
 
 
   render() { 
+    
       const classes = this.props.classes;
-
 
   return (
     <div className={classes.root}>
@@ -117,33 +99,24 @@ class Contacts extends React.Component<AProps, AState> {
         aria-label="Instytuty"
         className={ classes.tabs }
       >
-        {this.props.rstate.branches.map((br : ApiBranch, i : number) => {     
+        {this.props.rstate.branches.map(
+          (br : ApiBranch, i : number) => {     
            const label=br.branch;
-           return (<Tab label={label} {...a11yProps(i)}  />
+           return (<Tab key={i} label={label} {...a11yProps(i)}  />
            ) 
         })}
       </Tabs>
-      <TabPanel value={this.state.value} index={0}>
-        <h2>Biuro</h2>
-        <Filter  />
-    <Grid container >
-     { this.match("Jurek Wawro") &&
-       <Contact nazwisko="Jurek Wawro"  tel="999" email="jw@gmail.com"  link="#" funkcja="informatyk" /> 
-     }
-     { this.match("Jan Kowalski") &&
-     <Contact nazwisko="Jan Kowalski"  tel="999" email="jk@gmail.com" link="#" funkcja="sprzedawca" /> 
-     }
-     { this.match("Jan Nowak") &&
-      <Contact nazwisko="Jan Nowak"  tel="999" email="jw@gmail.com"  link="#" funkcja="informatyk" /> 
-     }
-     { this.match("Józef Nowak") &&
-      <Contact nazwisko="Józef Nowak"  tel="999" email="jk@gmail.com" link="#" funkcja="sprzedawca" /> 
-     }
-     </Grid>     
-      </TabPanel>
-      <TabPanel value={this.state.value} index={1}>
-        ....
-      </TabPanel>
+      {this.props.rstate.branches.map(
+          (br : ApiBranch, i : number) => {     
+           const label=br.branch;
+           return (
+            <TabPanel value={this.state.value} index={i}>
+            <h2>{label}</h2>
+            <Filter  />
+            <FContacts index={i} />
+          </TabPanel>    
+           ) 
+        })}
     </div>
   );
   }

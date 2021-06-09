@@ -10,6 +10,7 @@ import { ApiContact, ApiBranch } from './api'
 export type  AddrState = {
  filter : string,
  contacts : ApiContact[],
+ bselected : number,
  branches : ApiBranch[]
 };
 
@@ -17,6 +18,7 @@ const appDef = definition<AddrState>()
 .setDefault( { 
   filter : '',
   contacts: [],
+  bselected:-1,
   branches: []
   })
 .addReducers({
@@ -27,8 +29,8 @@ const appDef = definition<AddrState>()
   setBranches: (aState : AddrState, branches: ApiBranch[]) => 
    ({...aState, branches: branches}),
 
-  setContacts: (aState : AddrState, contacts: ApiContact[]) => 
-   ({...aState, contacts: contacts}),
+  setContacts: (aState : AddrState, bselected : number, contacts: ApiContact[]) => 
+   ({...aState, bselected : bselected, contacts: contacts}),
 
 
 });
